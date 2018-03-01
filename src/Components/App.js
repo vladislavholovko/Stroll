@@ -5,12 +5,11 @@ import Login from './Registration/Login';
 import CreateStroll from './Map/CreateStroll';
 import AllStroll from './Stroll/AllStroll';
 import Filter from './Filter/Filter';
-import Test from './Test';
-import './App.css';
+import '../Sources/App.css';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import logger from 'redux-logger';
-import addStroll from './Reducers/newCart';
+import addStroll from '../Reducers/newCart';
 
 export const store = createStore(addStroll, applyMiddleware(logger));
 
@@ -25,7 +24,6 @@ export default class App extends React.Component {
                         <Route path="/createstroll" component={CreateStroll}/>
                         <Route path="/allstroll" component={AllStroll}/>
                         <Route path="/filter" component={Filter}/>
-                        <Route path="/test" component={Test}/>
                     </div>
                 </Router>
             </Provider>

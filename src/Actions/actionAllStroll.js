@@ -1,4 +1,4 @@
-import {store} from "../App";
+import {store} from "../Components/App";
 import {actionAddStrollType} from '../Reducers/newCart';
 
 export function allStroll() {

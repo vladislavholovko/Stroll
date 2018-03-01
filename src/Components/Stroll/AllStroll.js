@@ -4,7 +4,7 @@ import {MyMapComponent} from "./Map";
 import ReactStars from 'react-stars';
 import {withRouter} from 'react-router';
 import {connect} from 'react-redux';
-import * as addInfo from '../Actions/actionAllStroll';
+import * as addInfo from '../../Actions/actionAllStroll';
 
 class AllStroll extends React.Component {
     constructor() {
@@ -31,7 +31,6 @@ class AllStroll extends React.Component {
     };
 //-----------------------------------------------------------------------------
     chooseRout() {
-        console.log(this.props.store.allStroll);
         return (
             <div className="container w-75 my-4">
                 <div className="row m-3">
