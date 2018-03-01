@@ -10,7 +10,7 @@ import './App.css';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import logger from 'redux-logger';
-import addStroll from './reducers/newCart'
+import addStroll from './Reducers/newCart';
 
 export const store = createStore(addStroll, applyMiddleware(logger));
 

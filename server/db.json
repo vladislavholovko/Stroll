@@ -399,14 +399,16 @@
       "description": "Да ладно. Що ви придумуєте. Хороший університет.",
       "rating": 10,
       "id": 15
-    }
-  ],
-  "favorites": [
+    },
     {
       "user": "vladholovko@mail.ru",
       "idMap": 1,
-      "id": 6
-    },
+      "description": "І надіюся ще буду їздити =)",
+      "rating": 10,
+      "id": 16
+    }
+  ],
+  "favorites": [
     {
       "user": "vladholovko@ukr.net",
       "idMap": 6,
@@ -431,6 +433,11 @@
       "user": "julia_nyash@ukr.net",
       "idMap": 6,
       "id": 12
+    },
+    {
+      "user": "vladholovko@mail.ru",
+      "idMap": 2,
+      "id": 13
     }
   ]
 }

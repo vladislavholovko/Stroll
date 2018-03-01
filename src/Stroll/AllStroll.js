@@ -2,18 +2,18 @@ import React from 'react';
 import Header from '../header';
 import {MyMapComponent} from "./Map";
 import ReactStars from 'react-stars';
+import {withRouter} from 'react-router';
+import {connect} from 'react-redux';
+import * as addInfo from '../Actions/actionAllStroll';
 
-export default class AllStroll extends React.Component {
+class AllStroll extends React.Component {
     constructor() {
         super();
         this.state = {
-            allStroll: [],
             idStroll: "",
             user: "",
-            allComments: [],
             rating: 0,
-            comments: "",
-            allFavorites: []
+            comments: ""
         };
         this.chooseRout = this.chooseRout.bind(this);
         this.content = this.content.bind(this);
@@ -23,18 +23,15 @@ export default class AllStroll extends React.Component {
     }
 
     componentDidMount(){
-        fetch("http://localhost:3001/createStroll")
-            .then(response => response.json())
-            .then(data => {this.setState({allStroll: data})});
-        fetch("http://localhost:3001/comments")
-            .then(response => response.json())
-            .then(data => {this.setState({allComments: data})});
-        fetch("http://localhost:3001/favorites")
-            .then(response => response.json())
-            .then(data => {this.setState({allFavorites: data})});
+        addInfo.allStroll();
+        addInfo.allComments();
+        addInfo.allFavorites();
+
+
     };
 //-----------------------------------------------------------------------------
     chooseRout() {
+        console.log(this.props.store.allStroll);
         return (
             <div className="container w-75 my-4">
                 <div className="row m-3">
@@ -44,11 +41,13 @@ export default class AllStroll extends React.Component {
                     <select className="w-50 mx-auto" value={this.state.idStroll} onChange={(e) =>this.setState({idStroll: e.target.value})}>
                         <option value="" disabled hidden>Choose a route</option>
                         {
-                            this.state.allStroll.map((value, index) => {
+
+                            this.props.store.allStroll.map((value, index) => {
                                 return (
                                     <option key={index} value={value.id}>{value.name}</option>
                                 )
                             })
+
                         }
                     </select>
                 </div>
@@ -60,7 +59,7 @@ export default class AllStroll extends React.Component {
     middleRating(){
         let rating=0;
         let count=0;
-        this.state.allComments.map((value) => {
+        this.props.store.allComments.map((value) => {
             if (Number(value.idMap) === Number(this.state.idStroll)) {
                 rating+=Number(value.rating);
                 count++;
@@ -70,7 +69,7 @@ export default class AllStroll extends React.Component {
     }
 //-----------------------------------------------------------------------------
     content() {
-        return this.state.allStroll.map((value, index) => {
+        return this.props.store.allStroll.map((value, index) => {
             if (Number(value.id) === Number(this.state.idStroll)) {
                 return (
                     <div key={index} className="container w-75 my-4">
@@ -130,7 +129,7 @@ export default class AllStroll extends React.Component {
 //-----------------------------------------------------------------------------
     favorite () {
         let butt;
-        let map = this.state.allFavorites.find((value) => {
+        let map = this.props.store.allFavorites.find((value) => {
             return (Number(value.idMap) === Number(this.state.idStroll) && value.user === JSON.parse(localStorage.getItem('email')))
         });
 
@@ -168,7 +167,7 @@ export default class AllStroll extends React.Component {
     }
 //-----------------------------------------------------------------------------
     allComments () {
-        return this.state.allComments.map((value, index) => {
+        return this.props.store.allComments.map((value, index) => {
             if (Number(value.idMap) === Number(this.state.idStroll)) {
                 return (
                     <div key={index} className=" border rounded container my-4 w-75">
@@ -199,7 +198,7 @@ export default class AllStroll extends React.Component {
 //-----------------------------------------------------------------------------
     allMap (e) {
         let allMap = [];
-        this.state.allStroll.map((value, index) => {
+        this.props.store.allStroll.map((value, index) => {
             if (value.user === e){
                 allMap.push(<div key={index} className="row" onClick={() =>this.setState({idStroll: value.id})}>
                                 <a className="col border rounded bg-success text-white p-1">{value.name}</a>
@@ -217,10 +216,8 @@ export default class AllStroll extends React.Component {
                 {this.chooseRout()}
                 {this.content()}
             </div>
-
-
-
-
         )
     }
 }
+
+export default connect(store => ({store: store}))(withRouter(AllStroll))
