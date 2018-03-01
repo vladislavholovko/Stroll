@@ -1,6 +1,8 @@
 import React from 'react';
+import {withRouter} from "react-router";
+import {connect} from "react-redux";
 
-export default class Registration extends  React.Component {
+class Registration extends  React.Component {
     constructor(){
         super();
         this.state={
@@ -68,3 +70,4 @@ export default class Registration extends  React.Component {
     )
     }
 }
+export default connect(store => ({store: store}))(withRouter(Registration))

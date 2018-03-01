@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {withRouter} from "react-router";
+import {connect} from "react-redux";
 
-export default class Login extends  React.Component {
+class Login extends  React.Component {
     constructor () {
         super ();
         this.state ={
@@ -53,10 +54,11 @@ export default class Login extends  React.Component {
                         <button type="submit" className="btn btn-primary px-2">Submit</button>
                     </div>
                     <div className="d-flex justify-content-end">
-                        <Link className="nav-link" to="/registration">If not registered click here</Link>
+                        <a onClick={()=>this.props.history.push('/registration')}>If not registered click here</a>
                     </div>
                 </div>
             </form>
         )
     }
 }
+export default connect(store => ({store: store}))(withRouter(Login))
