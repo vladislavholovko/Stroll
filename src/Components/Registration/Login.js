@@ -1,31 +1,28 @@
 import React from 'react';
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
+import * as userInfo from '../../Actions/actionAllStroll';
 
 class Login extends  React.Component {
     constructor () {
         super ();
         this.state ={
             email:'',
-            password:'',
-            users:[]
+            password:''
         };
         this.revision = this.revision.bind(this);
     }
 
     componentDidMount(){
-        fetch("http://localhost:3001/users")
-            .then(response => response.json())
-            .then(data => {this.setState({users: data})});
-
+        userInfo.allUser();
         if (localStorage.getItem('email')!==null){
             this.props.history.push('/allstroll');
         }
     };
 
     revision (e) {
-        for (let i = 0; i<this.state.users.length;i++){
-            if(this.state.users[i].email===this.state.email && this.state.users[i].password===this.state.password) {
+        for (let i = 0; i<this.props.store.allUser.length;i++){
+            if(this.props.store.allUser[i].email===this.state.email && this.props.store.allUser[i].password===this.state.password) {
                 localStorage.setItem('email', JSON.stringify(this.state.email));
                 return this.props.history.push('/allstroll');
             } else {

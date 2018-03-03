@@ -1,5 +1,5 @@
 import React from 'react';
-import {withGoogleMap, GoogleMap, Marker, Polyline} from "react-google-maps";
+import {withGoogleMap, GoogleMap, Marker} from "react-google-maps";
 
 export const MyMapComponent = withGoogleMap((props) => {
     let markers = props.markers.map((value,index)=>{

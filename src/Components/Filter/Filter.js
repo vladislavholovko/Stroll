@@ -1,15 +1,14 @@
 import React from 'react';
+import {withRouter} from 'react-router';
+import {connect} from 'react-redux';
 import Header from '../header';
+import * as filterInfo from '../../Actions/actionAllStroll';
 
-
-export default class Filter extends React.Component {
+class Filter extends React.Component {
     constructor() {
         super();
         this.state = {
-            allStroll: [],
-            searchStroll:[],
-            allCategory: [],
-            allFavorites: []
+            searchStroll:[]
         };
         this.showNameInfo = this.showNameInfo.bind(this);
         this.showDescriptionInfo = this.showDescriptionInfo.bind(this);
@@ -17,17 +16,9 @@ export default class Filter extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:3001/createStroll")
-            .then(response => response.json())
-            .then(data => {
-                this.setState({allStroll: data})
-            });
-        fetch("http://localhost:3001/category")
-            .then(response => response.json())
-            .then(data => {this.setState({allCategory: data})});
-        fetch("http://localhost:3001/favorites")
-            .then(response => response.json())
-            .then(data => {this.setState({allFavorites: data})});
+        filterInfo.allStroll();
+        filterInfo.allCategory();
+        filterInfo.allFavorites();
     }
 //-----------------------------------------------------------------------------
     showNameInfo(e) {
@@ -35,7 +26,7 @@ export default class Filter extends React.Component {
         document.getElementById("typeFilter").value = null;
         let see = [];
         let sValue = e;
-        let newList = this.state.allStroll;
+        let newList =  this.props.store.allStroll;
         let sList = newList.filter((value) => {
             let mTitle = value.name;
             return mTitle.indexOf(sValue) !== -1;
@@ -53,7 +44,7 @@ export default class Filter extends React.Component {
         document.getElementById("typeFilter").value = null;
         let see = [];
         let sValue = e;
-        let newList = this.state.allStroll;
+        let newList =  this.props.store.allStroll;
         let sList = newList.filter((value) => {
             let mTitle = value.description;
             return mTitle.indexOf(sValue) !== -1;
@@ -72,7 +63,7 @@ export default class Filter extends React.Component {
         document.getElementById("descriptionFilter").value = null;
         let see = [];
         let sValue = e;
-        let newList = this.state.allStroll;
+        let newList =  this.props.store.allStroll;
         let sList = newList.filter((value) => {
             let mTitle = value.category;
             return mTitle.indexOf(sValue) !== -1;
@@ -88,9 +79,9 @@ export default class Filter extends React.Component {
     showFavorite () {
         let users = JSON.parse(localStorage.getItem('email'));
         let favoriteId = [];
-        this.state.allFavorites.map(value => {
+        this.props.store.allFavorites.map(value => {
             if (users === value.user) {
-                let findStroll = this.state.allStroll.find((val)=>{
+                let findStroll =  this.props.store.allStroll.find((val)=>{
                     return val.id===value.idMap
                 });
                 favoriteId.push(findStroll);
@@ -98,10 +89,7 @@ export default class Filter extends React.Component {
             }
         });
         this.setState({searchStroll:favoriteId})
-
     }
-
-
 
 //-----------------------------------------------------------------------------
     render() {
@@ -137,7 +125,7 @@ export default class Filter extends React.Component {
                             <label htmlFor="typeFilter" className="mx-1">Type: </label>
                             <select id="typeFilter" onChange={(e) => {this.showCategory(e.target.value)}}>
                                 <option value="" disabled hidden>Select your category</option>
-                                {this.state.allCategory.map((value, index) => {
+                                { this.props.store.allCategory.map((value, index) => {
                                     return (
                                         <option key={index} value={value.name}>{value.name}</option>
                                     )
@@ -155,3 +143,5 @@ export default class Filter extends React.Component {
         )
     }
 }
+
+export default connect(store => ({store: store}))(withRouter(Filter))

@@ -1,9 +1,11 @@
 import React from 'react';
 import {MyMapComponent} from './Map';
 import Header from '../header';
+import {withRouter} from 'react-router';
+import {connect} from 'react-redux';
+import * as newInfo from '../../Actions/actionAllStroll';
 
-
-export default class CreateStroll extends  React.Component {
+class CreateStroll extends  React.Component {
     constructor () {
         super ();
         this.state = {
@@ -11,20 +13,14 @@ export default class CreateStroll extends  React.Component {
             category: "",
             markers: [],
             length: 432,
-            description: "",
-            allCategory: []
+            description: ""
         };
         this.revision = this.revision.bind(this);
-        this.content = this.content.bind(this);
         this.handelMarker = this.handelMarker.bind(this);
         this.changeCoordinatesOfMarker = this.changeCoordinatesOfMarker.bind(this);
     }
 
-    componentDidMount(){
-        fetch("http://localhost:3001/category")
-            .then(response => response.json())
-            .then(data => {this.setState({allCategory: data})});
-        };
+    componentDidMount(){newInfo.allCategory()};
 //-----------------------------------------------------------------------------
     handelMarker(lat,lng){
         let markers = this.state.markers;
@@ -55,48 +51,44 @@ export default class CreateStroll extends  React.Component {
     }
 
 //-----------------------------------------------------------------------------
-  content () {
-    return (
-        <form className="container w-50 my-4" onSubmit={this.revision}>
-          <div className="row m-3">
-            <input type="text" placeholder="Name stroll" className="w-50 mx-auto " value={this.state.name} onChange={(e)=>this.setState({name:e.target.value})}/>
-          </div>
-          <div className="row m-3">
-            <select className="w-50 mx-auto" value={this.state.category} onChange={(e)=>this.setState({category:e.target.value})}>
-                <option value="" disabled hidden>Select your category</option>
-                {this.state.allCategory.map((value, index) => {
-                    return (
-                        <option key={index} value={value.name}>{value.name}</option>
-                    )
-                })
-                }
-            </select>
-          </div>
-            <MyMapComponent markers={this.state.markers}
-                            handelMarker={this.handelMarker}
-                            changeCoordinatesOfMarker={this.changeCoordinatesOfMarker}
-                            containerElement={<div style={{height: '400px'}}/>}
-                            mapElement={<div style={{height: `100%`}}/>}
-            />
-          <div className="row m-3">
-            <p className="mx-auto border rounded p-2 border-success">Length: {this.props.length}</p>
-          </div>
-          <div className="row m-3">
-            <textarea placeholder="Route Description" className="col" style={{height:200}} value={this.state.description} onChange={(e)=>this.setState({description:e.target.value})}/>
-          </div>
-            <div className="row m-3">
-                <button type="submit" className="btn btn-primary px-2 col" >Create stroll</button>
-            </div>
-        </form>
-    )
-  }
-//-----------------------------------------------------------------------------
   render() {
     return (
       <div>
           <Header/>
-          {this.content()}
+          <form className="container w-50 my-4" onSubmit={this.revision}>
+              <div className="row m-3">
+                  <input type="text" placeholder="Name stroll" className="w-50 mx-auto " value={this.state.name} onChange={(e)=>this.setState({name:e.target.value})}/>
+              </div>
+              <div className="row m-3">
+                  <select className="w-50 mx-auto" value={this.state.category} onChange={(e)=>this.setState({category:e.target.value})}>
+                      <option value="" disabled hidden>Select your category</option>
+                      {this.props.store.allCategory.map((value, index) => {
+                          return (
+                              <option key={index} value={value.name}>{value.name}</option>
+                          )
+                      })
+                      }
+                  </select>
+              </div>
+              <MyMapComponent markers={this.state.markers}
+                              handelMarker={this.handelMarker}
+                              changeCoordinatesOfMarker={this.changeCoordinatesOfMarker}
+                              containerElement={<div style={{height: '400px'}}/>}
+                              mapElement={<div style={{height: `100%`}}/>}
+              />
+              <div className="row m-3">
+                  <p className="mx-auto border rounded p-2 border-success">Length: {this.props.length}</p>
+              </div>
+              <div className="row m-3">
+                  <textarea placeholder="Route Description" className="col" style={{height:200}} value={this.state.description} onChange={(e)=>this.setState({description:e.target.value})}/>
+              </div>
+              <div className="row m-3">
+                  <button type="submit" className="btn btn-primary px-2 col" >Create stroll</button>
+              </div>
+          </form>
       </div>
     );
   }
 }
+
+export default connect(store => ({store: store}))(withRouter(CreateStroll))
